@@ -41,10 +41,21 @@ function cyviewspy()
 	if ("$2")
 	{
 		var output = '';
-		var views = choose($2);
-		for (var i in views)
+		var items = choose($2);
+		for (var i in items)
 		{
-			output += subviews(views[i]);
+			var item = items[i];
+			if ([item isKindOfClass: NSViewController])
+				item = item.view;
+			else if([item isKindOfClass: NSWindow])
+				item = item.contentView;
+			else if ([item isKindOfClass: NSWindowController])
+				item = item.window.contentView;
+
+			if (! [item isKindOfClass: NSView])
+				output = "It has to be a window/view or ~controller. but $2 isn't.\n"
+				break;
+			output += subviews(item);
 		}
 		[output writeToFile:"/tmp/cycript.log" atomically:NO encoding:4 error:NULL];
 	}
