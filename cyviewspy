@@ -53,8 +53,10 @@ function cyviewspy()
 				item = item.window.contentView;
 
 			if (! [item isKindOfClass: NSView])
+			{
 				output = "It has to be a window/view or ~controller. but $2 isn't.\n"
 				break;
+			}
 			output += subviews(item);
 		}
 		[output writeToFile:"/tmp/cycript.log" atomically:NO encoding:4 error:NULL];
