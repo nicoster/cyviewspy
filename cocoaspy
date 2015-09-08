@@ -1,0 +1,62 @@
+#!/bin/sh
+
+rm /tmp/cycript.log 2> /dev/null
+sudo cycript -p $1  <<END
+function rect2str(rect)
+{
+	return '{{' + rect.origin.x + ',' + rect.origin.y + '}, {' + rect.size.width + ', ' + rect.size.height + '}}';
+}
+
+function makeIndent(indent){
+	var output = ''
+	for (var i = 0; i < indent * 4; i ++){ output += ' ';}
+	return output;
+}
+
+function subviews(view, indent = 0)
+{
+	// return view.description;
+	var log = makeIndent(indent) + view.class + '	{' + view.title + '}	frame:' + rect2str(view.frame) + '\n';
+	for(i in view.subviews){
+		var v = view.subviews[i];
+		log += subviews(v, indent + 1);
+	}
+
+	return log;
+};
+
+function allwins()
+{
+	var wins = [NSApplication sharedApplication].windows;
+	var output = '';
+	for (var i in wins)
+	{
+		var win = wins[i];
+		output += subviews(win.contentView) + '\n';
+	}
+	[output writeToFile:"/tmp/cycript.log" atomically:NO encoding:4 error:NULL];
+}
+
+function main()
+{
+	if ("$2")
+	{
+		var output = '';
+		var views = choose($2);
+		for (var i in views)
+		{
+			output += subviews(views[i]);
+		}
+		[output writeToFile:"/tmp/cycript.log" atomically:NO encoding:4 error:NULL];
+	}
+	else
+	{
+		allwins();
+	}
+}
+
+main();
+0
+END
+
+cat /tmp/cycript.log
