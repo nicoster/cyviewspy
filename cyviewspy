@@ -36,7 +36,7 @@ function allwins()
 	[output writeToFile:"/tmp/cycript.log" atomically:NO encoding:4 error:NULL];
 }
 
-function cocoaspy()
+function cyviewspy()
 {
 	if ("$2")
 	{
@@ -54,7 +54,7 @@ function cocoaspy()
 	}
 }
 
-cocoaspy();
+cyviewspy();
 0
 END
 
