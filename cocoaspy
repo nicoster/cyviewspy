@@ -15,8 +15,7 @@ function makeIndent(indent){
 
 function subviews(view, indent = 0)
 {
-	// return view.description;
-	var log = makeIndent(indent) + view.class + '	{' + view.title + '}	frame:' + rect2str(view.frame) + '\n';
+	var log = makeIndent(indent) + view.class + (view.title ? '	{' + view.title + '}' : '') + (view.hidden ? ' [hidden]' : '') + '	frame:' + rect2str(view.frame) + '\n';
 	for(i in view.subviews){
 		var v = view.subviews[i];
 		log += subviews(v, indent + 1);
@@ -37,7 +36,7 @@ function allwins()
 	[output writeToFile:"/tmp/cycript.log" atomically:NO encoding:4 error:NULL];
 }
 
-function main()
+function cocoaspy()
 {
 	if ("$2")
 	{
@@ -55,7 +54,7 @@ function main()
 	}
 }
 
-main();
+cocoaspy();
 0
 END
 
