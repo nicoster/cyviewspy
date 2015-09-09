@@ -1,7 +1,7 @@
 #!/bin/sh
 
 rm /tmp/cycript.log 2> /dev/null
-sudo cycript -p $1  <<END
+sudo cycript -p $1 > /dev/null <<END
 function rect2str(rect)
 {
 	return '{{' + rect.origin.x + ',' + rect.origin.y + '}, {' + rect.size.width + ', ' + rect.size.height + '}}';
@@ -15,7 +15,10 @@ function makeIndent(indent){
 
 function subviews(view, indent = 0)
 {
-	var log = makeIndent(indent) + view.class + (view.title ? '	{' + view.title + '}' : '') + (view.hidden ? ' [hidden]' : '') + '	frame:' + rect2str(view.frame) + '\n';
+	var tokens = view.toCYON().split(' ');
+	var name = tokens.length >= 2 ? tokens[0].substr(3) + ' #' + tokens[1].substr(0, tokens[1].length - 2) : view
+	var title = view.title ? view.title : (view.cell ? view.cell.title : '')
+	var log = makeIndent(indent) + name + (title ? '	{' + title + '}' : '') + (view.hidden ? ' [hidden]' : '') + '	frame:' + rect2str(view.frame) + '\n';
 	for(i in view.subviews){
 		var v = view.subviews[i];
 		log += subviews(v, indent + 1);
@@ -71,4 +74,4 @@ cyviewspy();
 0
 END
 
-cat /tmp/cycript.log
+cat /tmp/cycript.log 2>/dev/null && echo && echo Pick an address for further checking or Ctrl+D to quit cycript.&& sudo cycript -p $1
