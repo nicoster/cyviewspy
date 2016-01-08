@@ -65,5 +65,8 @@ Here is the example for Safari.app:
 
 ## Known Issues
 * it's written for Mac only, but it's trivial to make it work for iOS.
+* due to the limitation of Cycript
+    * it doesn't work if the target process have no network access due to sandboxing
+    * it doesn't work well on 10.11. some functions don't work.
   
   
