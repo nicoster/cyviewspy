@@ -8,10 +8,40 @@ To dump the view hierarchy of an Cocoa application is trivial, just call somethi
 So you need to install [Cycript](https://cydia.saurik.com/api/latest/3) to run this util. 
 
 
-For v0.9.502 (the latest version when this writing), you better install it to /usr/local/ for less hassle.
+For v0.9.502, you better install it to /usr/local/ for less hassle.
 
     MacBook:~$ sudo cp -a Cycript.lib/*.dylib /usr/local/lib
     MacBook:~$ sudo cp -a Cycript.lib/cycript /usr/local/bin
+
+For v0.9.592 (the latest version when this writing), you could unpack and copy all the files into one (like /usr/local/bin) of the folders listed in PATH. After the installation, the files should look like this:
+
+    $ pwd
+    /usr/local/bin
+    $ tree|grep -i cycript
+    ├── Cycript.ios
+    │   └── Cycript.framework
+    │       ├── Cycript
+    │           └── Cycript.h
+    ├── Cycript.lib
+    │   ├── cycript
+    │   ├── cycript-a32
+    │   ├── cycript-apl
+    │   ├── cycript-pie
+    │   ├── cycript0.9
+    │   │       └── cycript
+    │   ├── libcycript-sim.dylib
+    │   ├── libcycript-sys.dylib -> libcycript.dylib
+    │   ├── libcycript.cy
+    │   ├── libcycript.db
+    │   ├── libcycript.dylib
+    │   ├── libcycript.jar
+    │   ├── libcycript.so
+    ├── Cycript.osx
+    │   └── Cycript.framework
+    │       ├── Cycript
+    │           └── Cycript.h
+    ├── cycript
+
 
 And you may refer the [Cycript manual](http://www.cycript.org/manual/) if any problem.
 
@@ -62,6 +92,9 @@ Here is the example for Safari.app:
         ButtonPlus	{Web Inspector}	frame:{{202,52}, {37, 25}}
         ButtonPlus	{iCloud Tabs}	frame:{{342,52}, {37, 25}}
     ...
+
+After dumping the NSViews, you could manipulate the views with Cycript commands like the following:
+    
 
 ## Known Issues
 * it's written for Mac only, but it's trivial to make it work for iOS.
